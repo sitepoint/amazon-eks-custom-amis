@@ -16,12 +16,6 @@ chmod 644 /var/lib/kubelet/kubeconfig
 echo "3.1.2 - ensure that the kubelet kubeconfig file ownership is set to root:root"
 chown root:root /var/lib/kubelet/kubeconfig
 
-echo "3.1.3 - ensure that the kubelet configuration file permissions are set to 644 or more restrictive"
-chmod 644 /etc/kubernetes/kubelet/kubelet-config.json
-
-echo "3.1.4 - ensure that the kubelet configuration file ownership is set to root:root"
-chown root:root /etc/kubernetes/kubelet/kubelet-config.json
-
 echo "3.2 - kubelet"
 cat > /etc/kubernetes/kubelet/kubelet-config.json <<EOF
 {
@@ -74,3 +68,9 @@ cat > /etc/kubernetes/kubelet/kubelet-config.json <<EOF
   "maxPods": 110
 }
 EOF
+
+echo "3.2.1 - ensure that the kubelet configuration file permissions are set to 644 or more restrictive"
+chmod 644 /etc/kubernetes/kubelet/kubelet-config.json
+
+echo "3.2.2 - ensure that the kubelet configuration file ownership is set to root:root"
+chown root:root /etc/kubernetes/kubelet/kubelet-config.json
