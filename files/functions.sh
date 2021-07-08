@@ -376,21 +376,15 @@ partition_disks() {
     # partition the disk
     parted -a optimal -s $disk_name \
         mklabel gpt \
-        mkpart var ext4 0% 20% \
-        mkpart varlog ext4 20% 40% \
-        mkpart varlogaudit ext4 40% 60% \
-        mkpart home ext4 60% 70% \
-        mkpart varlibdocker ext4 70% 90%
+        mkpart var ext4 0% 90% \
+        mkpart home ext4 90% 100%
 
     # wait for the disks to settle
     sleep 5
 
     # migrate and mount the existing
-    migrate_and_mount_disk "${disk_name}p1" /var            defaults,nofail,nodev
-    migrate_and_mount_disk "${disk_name}p2" /var/log        defaults,nofail,nodev,nosuid
-    migrate_and_mount_disk "${disk_name}p3" /var/log/audit  defaults,nofail,nodev,nosuid
-    migrate_and_mount_disk "${disk_name}p4" /home           defaults,nofail,nodev,nosuid
-    migrate_and_mount_disk "${disk_name}p5" /var/lib/docker defaults,nofail
+    migrate_and_mount_disk "${disk_name}p1" /var                defaults,nofail,nodev
+    migrate_and_mount_disk "${disk_name}p2" /home               defaults,nofail,nodev,nosuid
 }
 
 ################################################################
