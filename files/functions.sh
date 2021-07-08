@@ -376,15 +376,13 @@ partition_disks() {
     # partition the disk
     parted -a optimal -s $disk_name \
         mklabel gpt \
-        mkpart var ext4 0% 90% \
-        mkpart home ext4 90% 100%
+        mkpart home ext4 0% 90%
 
     # wait for the disks to settle
     sleep 5
 
     # migrate and mount the existing
-    migrate_and_mount_disk "${disk_name}p1" /var                defaults,nofail,nodev
-    migrate_and_mount_disk "${disk_name}p2" /home               defaults,nofail,nodev,nosuid
+    migrate_and_mount_disk "${disk_name}p1" /home               defaults,nofail,nodev,nosuid
 }
 
 ################################################################
