@@ -92,7 +92,7 @@ EOF
   # Install containerd
   curl -sSL https://github.com/containerd/nerdctl/releases/download/v0.10.0/nerdctl-full-0.10.0-linux-amd64.tar.gz -o - | tar -xz -C /usr/local
 
-  mkdir -p /etc/containerd
+  mkdir -p /etc/containerd /etc/containerd/certs.d
   cp /etc/packer/files/gitpod/containerd.toml /etc/containerd/config.toml
 
   cp /usr/local/lib/systemd/system/* /lib/systemd/system/
@@ -106,8 +106,6 @@ EOF
 
   # Reload systemd
   systemctl daemon-reload
-
-  systemctl enable rc-local
 
   mkdir -p /etc/containerd-stargz-grpc/
 

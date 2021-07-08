@@ -50,7 +50,7 @@ cat > /etc/kubernetes/kubelet/kubelet-config.json <<EOF
   "clusterDomain": "cluster.local",
   "hairpinMode": "hairpin-veth",
   "readOnlyPort": 0,
-  "cgroupDriver": "cgroupfs",
+  "cgroupDriver": "systemd",
   "cgroupRoot": "/",
   "featureGates": {
     "RotateKubeletServerCertificate": true
@@ -58,10 +58,19 @@ cat > /etc/kubernetes/kubelet/kubelet-config.json <<EOF
   "protectKernelDefaults": true,
   "serializeImagePulls": false,
   "serverTLSBootstrap": true,
-  "streamingConnectionIdleTimeout": "4h0m0s",
-  "makeIPTablesUtilChains": true,
-  "eventRecordQPS": 5,
-  "RotateCertificate": true,
-  "tlsCipherSuites": ["TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256", "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256", "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305", "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384", "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305", "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384", "TLS_RSA_WITH_AES_256_GCM_SHA384", "TLS_RSA_WITH_AES_128_GCM_SHA256"]
+  "tlsCipherSuites": [
+    "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+    "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+    "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305",
+    "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+    "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305",
+    "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
+    "TLS_RSA_WITH_AES_256_GCM_SHA384",
+    "TLS_RSA_WITH_AES_128_GCM_SHA256"
+  ],
+  "resolvConf": "/run/systemd/resolve/resolv.conf",
+  "registryBurst": 20,
+  "registryQps": 15,
+  "maxPods": 110
 }
 EOF
