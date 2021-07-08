@@ -111,7 +111,7 @@ EOF
 
   # Start containerd and stargz
   systemctl enable containerd
-  systemctl enable stargz-snapshotter
+  #systemctl enable stargz-snapshotter
 
 else
 
