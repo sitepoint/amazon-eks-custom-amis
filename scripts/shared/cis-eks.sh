@@ -64,8 +64,10 @@ cat > /etc/kubernetes/kubelet/kubelet-config.json <<EOF
   ],
   "resolvConf": "/run/systemd/resolve/resolv.conf",
   "registryBurst": 20,
-  "registryQps": 15,
-  "maxPods": 110
+  "registryPullQPS": 15,
+  "maxPods": 110,
+  "imageGCHighThresholdPercent": 70,
+  "imageGCLowThresholdPercent": 50
 }
 EOF
 
