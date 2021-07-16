@@ -135,8 +135,12 @@ mkdir -p /var/lib/containerd/io.containerd.snapshotter.v1.stargz
 
 mkdir -p /etc/eks
 curl -sL -o /etc/eks/eni-max-pods.txt https://raw.githubusercontent.com/awslabs/amazon-eks-ami/master/files/eni-max-pods.txt
-curl -sL -o /etc/eks/bootstrap.sh https://raw.githubusercontent.com/awslabs/amazon-eks-ami/master/files/bootstrap.sh
-chmod +x /etc/eks/bootstrap.sh
+#curl -sL -o /etc/eks/iptables-restore.service https://raw.githubusercontent.com/awslabs/amazon-eks-ami/master/files/iptables-restore.service
+#curl -sL -o /etc/eks/bootstrap.sh https://raw.githubusercontent.com/awslabs/amazon-eks-ami/master/files/bootstrap.sh
+#chmod +x /etc/eks/bootstrap.sh
+
+cp /etc/packer/files/gitpod/bootstrap.sh /etc/eks/bootstrap.sh
+chown root:root /etc/eks/bootstrap.sh
 
 ################################################################################
 ### Stuff required by "protectKernelDefaults=true" #############################

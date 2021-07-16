@@ -55,7 +55,7 @@ elif is_ubuntu; then
 
   add-apt-repository -y ppa:tuxinvader/lts-mainline
   apt-get update
-  apt-get install -y linux-generic-5.13
+  apt-get install -y linux-generic-5.12
 
   # Install required packages
   apt-get install -y \
@@ -84,22 +84,22 @@ blacklist sctp
 EOF
 
   # Configure grub
-  echo "GRUB_GFXPAYLOAD_LINUX=keep" >> /etc/default/grub
+  #echo "GRUB_GFXPAYLOAD_LINUX=keep" >> /etc/default/grub
   # Enable cgroups2
-  sed -i 's/GRUB_CMDLINE_LINUX="\(.*\)"/GRUB_CMDLINE_LINUX="systemd.unified_cgroup_hierarchy=1 cgroup_no_v1=all \1"/g' /etc/default/grub
-  update-grub2
+  #sed -i 's/GRUB_CMDLINE_LINUX="\(.*\)"/GRUB_CMDLINE_LINUX="systemd.unified_cgroup_hierarchy=1 cgroup_no_v1=all \1"/g' /etc/default/grub
+  #update-grub2
 
   # Install containerd
   curl -sSL https://github.com/containerd/nerdctl/releases/download/v0.10.0/nerdctl-full-0.10.0-linux-amd64.tar.gz -o - | tar -xz -C /usr/local
 
   mkdir -p /etc/containerd /etc/containerd/certs.d
+
   cp /etc/packer/files/gitpod/containerd.toml /etc/containerd/config.toml
 
   cp /usr/local/lib/systemd/system/* /lib/systemd/system/
   sed -i 's/--log-level=debug//g' /lib/systemd/system/stargz-snapshotter.service
 
-  cp /etc/packer/files/gitpod/sysctl/* /etc/sysctl.d/
-
+  cp /usr/local/lib/systemd/system/* /lib/systemd/system/
   # Disable software irqbalance service
   systemctl stop irqbalance.service
   systemctl disable irqbalance.service
@@ -109,9 +109,15 @@ EOF
 
   mkdir -p /etc/containerd-stargz-grpc/
 
+  # Install kata containers
+  #snap install kata-containers --stable --classic
+  #mkdir -p /etc/kata-containers
+  #cp /snap/kata-containers/current/usr/share/defaults/kata-containers/configuration.toml /etc/kata-containers/
+  #ln -sf /snap/kata-containers/current/usr/bin/containerd-shim-kata-v2 /usr/local/bin/containerd-shim-kata-v2
+
   # Start containerd and stargz
   systemctl enable containerd
-  #systemctl enable stargz-snapshotter
+  systemctl enable stargz-snapshotter
 
 else
 
@@ -119,49 +125,3 @@ else
   exit 1
 
 fi
-
-# ensure the directory is created
-mkdir -p /etc/systemd/system/docker.service.d
-mkdir -p /etc/docker
-
-DOCKER_SELINUX_ENABLED="false"
-
-cat > /etc/docker/daemon.json <<EOF
-{
-  "bridge": "none",
-  "log-driver": "json-file",
-  "log-opts": {
-    "max-size": "10m",
-    "max-file": "10"
-  },
-  "icc": false,
-  "iptables": true,
-  "storage-driver": "overlay2",
-  "default-ulimits": {
-    "nofile": {
-      "Name": "nofile",
-      "Hard": 200,
-      "Soft": 100
-    },
-    "nofile": {
-      "Name": "nproc",
-      "Hard": 2048,
-      "Soft": 1024
-    }
-  },
-  "live-restore": true,
-  "userland-proxy": false,
-  "max-concurrent-downloads": 10,
-  "experimental": false,
-  "insecure-registries": [],
-  "selinux-enabled": ${DOCKER_SELINUX_ENABLED}
-}
-EOF
-
-chown root:root /etc/docker/daemon.json
-
-configure_docker_environment
-
-#systemctl daemon-reload
-#systemctl enable docker && systemctl start docker
-
