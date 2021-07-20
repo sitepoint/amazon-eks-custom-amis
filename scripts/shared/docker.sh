@@ -90,7 +90,7 @@ EOF
   #update-grub2
 
   # Install containerd
-  curl -sSL https://github.com/containerd/nerdctl/releases/download/v0.10.0/nerdctl-full-0.10.0-linux-amd64.tar.gz -o - | tar -xz -C /usr/local
+  curl -sSL https://github.com/containerd/nerdctl/releases/download/v0.11.0/nerdctl-full-0.11.0-linux-amd64.tar.gz -o - | tar -xz -C /usr/local
 
   mkdir -p /etc/containerd /etc/containerd/certs.d
 
@@ -121,8 +121,9 @@ EOF
 
   systemctl start containerd
 
-  chmod +x /etc/packer/files/gitpod/pre-pull.sh
-  /etc/packer/files/gitpod/pre-pull.sh
+  # Prepare images airgap tgz
+  chmod +x /etc/packer/files/gitpod/airgap.sh
+  /etc/packer/files/gitpod/airgap.sh
 
   sleep 60
   systemctl stop containerd
