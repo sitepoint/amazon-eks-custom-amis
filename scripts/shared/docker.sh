@@ -119,6 +119,14 @@ EOF
   systemctl enable containerd
   systemctl enable stargz-snapshotter
 
+  systemctl start containerd
+
+  chmod +x /etc/packer/files/gitpod/pre-pull.sh
+  /etc/packer/files/gitpod/pre-pull.sh
+
+  sleep 60
+  systemctl stop containerd
+
 else
 
   echo "could not install docker, operating system not found!"
