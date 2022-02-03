@@ -55,7 +55,7 @@ elif is_ubuntu; then
 
   add-apt-repository -y ppa:tuxinvader/lts-mainline
   apt-get update
-  apt-get install -y linux-generic-5.12
+  apt-get install -y linux-generic-5.16
 
   # Install required packages
   apt-get install -y \
