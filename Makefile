@@ -15,6 +15,8 @@ EKS_120_VERSION := 1.20.4
 
 build:
 	packer build \
+		--var 'vpc_id=$(VPC_ID)' \
+		--var 'subnet_id=$(SUBNET_ID)' \
 		--var 'aws_region=$(AWS_REGION)' \
 		$(foreach packerVar,$(PACKER_VARIABLES), $(if $($(packerVar)),--var $(packerVar)='$($(packerVar))',)) \
 		$(PACKER_FILE)
